@@ -1,0 +1,288 @@
+{% extends 'layouts/base.html' %}
+
+
+{% block title %}
+    Điểm Lắp Đặt ATM/CDM
+{% endblock title %}
+
+{% block stylesheets %}
+    <style>
+        .btn-atm {
+            width: 100%;
+        }
+        .alert-atm {
+            display: inline-block;
+            margin: 15px auto;
+            position: fixed;
+            transition: all 0.5s ease-in-out 0s;
+            z-index: 1031;
+            top: 20px;
+            right: 20px;
+        }
+        .loca {
+          display: inline-block;
+          width: 150px;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}    
+    <div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="col-11 col-md-4 alert alert-success alert-with-icon alert-atm" data-notify="container">
+                    <i class="material-icons" data-notify="icon">notifications</i>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <i class="material-icons">close</i>
+                    </button>
+                    <span data-notify="icon" class="now-ui-icons ui-1_bell-53"></span>
+                    <span data-notify="message">{{ message }}</span>
+                </div>
+            {% endfor %}            
+        {% endif %}
+    </div>
+    <div class="modal fade" id="create-modal"  role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div>
+        </div>
+        </div>
+
+        <div class="modal fade"  role="dialog" id="modal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div class="content" id="testAuto">
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header card-header-primary card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">my_location</i>
+                    </div>
+                    <p class="card-category">Tổng Số Điểm Đặt</p>
+                    <h3 class="card-title">{{ total_locations }}</h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <i class="material-icons">healing</i> Có mặt trên khắp cả nước
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header card-header-info card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">nature</i>
+                    </div>
+                    <p class="card-category">Tổng Điểm Trong</p>
+                    <h3 class="card-title">{{ total_in }}</h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <i class="material-icons">filter_vintage</i> Các điểm thuộc CN/PGD
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">nature_people</i>
+                    </div>
+                    <p class="card-category">Tổng Điểm Ngoài</p>
+                    <h3 class="card-title">{{ total_out }}</h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <i class="material-icons">flare</i> Các điểm nằm bên ngoài CN/PGD
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon" id="TrongDiem">
+                    <div class="card-icon">
+                      <i class="material-icons">all_out</i>
+                    </div>
+                    <p class="card-category">Tổng Trọng Điểm</p>
+                    <h3 class="card-title">{{ total_forcus }}</h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <i class="material-icons">warning</i> Khu vực trọng điểm
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" >
+                <div class="col-md-12">
+                    <div class="card" id="auto-reload">
+                        <div class="card-header card-header-primary card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">assignment</i>
+                            </div>
+                            <h4 class="card-title">ĐIỂM LẮP ĐẶT ATM</h4>
+                        </div>
+                        <div class="card-body">
+                            {% if request.user.groups.all.0.name == 'BP. GSVH ATM' %}
+                              <div class="toolbar">
+                                <!--        Here you can write extra buttons/actions for the toolbar              -->
+                                <button id="location-create" class="bs-modal btn btn-primary" type="button" name="button" data-form-url="{% url 'location-create' %}">
+                                    <i class="material-icons">add_box</i> Thêm Điểm Lắp Đặt
+                                </button>  
+                                <!--
+                                <p class="card-category">Filters</p>
+                                <form method="GET">
+                                  {{ filters.form.manager }}
+                                    <button type="submit" class="btn btn-rose">Search</button>
+                                </form>
+                                -->
+                              </div>
+                            {% endif %}
+                            <div class="material-datatables" id="myTable">
+                                <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                    <thead>                                        
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tên Điểm</th>                
+                                            <th>Địa Điểm</th>
+                                            <th>ĐVQL</th>
+                                            <th>ĐVTQ</th>                        
+                                            <th>Vị Trí</th>                                            
+                                            <th class="text-right disabled-sorting">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên Điểm</th>
+                                            <th>Địa Điểm</th> 
+                                            <th>ĐVQL</th>
+                                            <th>ĐVTQ</th>                                            
+                                            <th>Vị Trí</th>  
+                                            <th class="text-right">Action</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                      <div id="RefeshTable">
+                                        {% for location in filters.qs %}
+                                            <tr>
+                                                <th>{{ forloop.counter }}</th>
+                                                <td class="text-primary">{{ location.name }}</td>                                                
+                                                <td>{{ location.street }}, {{ location.ward.name }}, {{ location.district.name }}, {{ location.city.name }}</td>
+                                                <td>{{ location.manager }}</td>
+                                                <td>{{ location.fundraiser }}</td>
+                                                <td>{{ location.get_area_display }}</td>
+                                                <td class="text-right ">
+                                                    <button type="button" class="bs-modal btn btn-sm btn-info btn-just-icon btn-link" data-form-url="{% url 'location-read' location.pk %}">
+                                                        <i class="material-icons">visibility</i>
+                                                    </button>
+                                                    {% if request.user.groups.all.0.name == 'BP. GSVH ATM' %}
+                                                      <button type="button" class="bs-modal btn btn-sm btn-warning btn-just-icon btn-link" data-form-url="{% url 'location-update' location.pk %}">
+                                                          <i class="material-icons">create</i>
+                                                      </button>
+                                                      <button type="button" class="bs-modal btn btn-sm btn-danger btn-just-icon btn-link" data-form-url="{% url 'location-delete' location.pk %}">
+                                                          <i class="material-icons">close</i>
+                                                      </button>                                                    
+                                                    {% endif %}
+                                                    
+                                                </td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td colspan="4">Chưa có thông tin! <a href="#">Tạo điểm lắp đặt ngay!</a>.</td>
+                                            </tr>
+                                        {% endfor %}
+                                      </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- end content-->
+                    </div>
+                    <!--  end card  -->
+                </div>
+                <!-- end col-md-12 -->
+            </div>
+            <!-- end row -->
+        </div>
+    </div>        
+    
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+    var tables = $('#datatables').DataTable({
+      "processing": true,
+      
+      "pagingType": "full_numbers",
+      "lengthMenu": [
+        [10, 25, 50, -1],
+        [10, 25, 50, "All"]
+      ],
+      responsive: true,
+      language: {
+        search: "",
+        searchPlaceholder: "Tìm kiếm điểm lắp đặt",
+      },
+      
+    });
+    
+    //setInterval(function() {
+    //  $("#testAuto").load(location.href + " #testAuto");
+    //},5000);
+    
+  });
+  
+  
+
+
+  //Hàm tự động render modal cho class bs-modal
+  $(".bs-modal").each(function () {
+    $(this).modalForm({formURL: $(this).data("form-url")});
+  });
+
+  //Ẩn thông báo khi tạo mới, cập nhật hoặc xoá
+  $(".alert").fadeTo(5000, 500).slideUp(500, function () {
+      $(".alert").slideUp(500);
+  
+  }); 
+
+  $('#modal').on('shown.bs.modal', function () {
+    //Chèn select2 vào
+    $('#id_city, #id_district, #id_ward').select2({
+      width: '100%',
+      placeholder: "Lựa chọn thông tin...",
+    });
+
+    //Chèn Selectpicker vào
+    $('.selectpicker').selectpicker();
+
+    //Focus vào ô đầu tiên
+    setTimeout(function (){
+      $('#id_name').focus();
+    }, 500);
+
+    //Tự động mở drop khi nhấn tab
+    $(document).on('focus', '.select2.select2-container', function (e) {
+      var isOriginalEvent = e.originalEvent // don't re-open on closing focus event
+      var isSingleSelect = $(this).find(".select2-selection--single").length > 0 // multi-select will pass focus to input
+
+      if (isOriginalEvent && isSingleSelect) {
+        $(this).siblings('select:enabled').select2('open');
+      } 
+    });
+  });
+  
+</script>  
+{% endblock javascripts %}
+
+

@@ -1,0 +1,64 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+    Import File Fee CBC
+{% endblock title %}
+
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}    
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-8 col-12 mr-auto ml-auto">
+          <h3 class="text-center text-primary">CÁC BƯỚC THỰC HIỆN TÍNH CHI PHÍ PHÂN BỔ CHO KPP</h3>
+          <div class="card text-center">
+            <div class="card-header card-header-rose">
+              <ul class="nav nav-tabs justify-content-center">
+                <li class="nav-item">
+                  <a class="nav-link " href="{% url 'summary-home' %}">BƯỚC 01</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="{% url 'fee-cbc-home' %}"><i class="material-icons">face</i> BƯỚC 02</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'fee-qr-home' %}">BƯỚC 03</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'fee-cup-home' %}">BƯỚC 04</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'fee-napas-home' %}">BƯỚC 05</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'summary-surcharge' %}">BƯỚC 06</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sum-fee-home' %}">BƯỚC 07</a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">NHẬP DỮ LIỆU CHO PHÍ CBC TỪ FILE</h4>
+              <p class="card-text">Vui lòng thay đổi dữ liệu file theo hàng tháng</p>
+              
+              <a href="{% url 'import-fee-cbc' %}" class="btn btn-primary">Import File...</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>        
+    
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  
+</script>  
+{% endblock javascripts %}
+
+

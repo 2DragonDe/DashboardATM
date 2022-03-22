@@ -1,0 +1,97 @@
+    {% load static %}
+
+    <div class="sidebar" data-color="azure" data-background-color="black" data-image="/static/assets/img/sidebar-1.jpg">
+    <!-- data-color="purple | azure | green | orange | danger" -->
+      <div class="logo">
+        <a href="/" class="simple-text logo-mini">GS</a>
+        <a href="/" class="simple-text logo-normal">VẬN HÀNH ATM </a>
+      </div>
+      {% if user.is_authenticated %}
+      {% with request.resolver_match.url_name as url_name %}
+      <div class="sidebar-wrapper">
+        <div class="user">
+          <div class="photo">
+            <img src="{{ user.profile.image.url }}" />
+          </div>
+          <div class="user-info">
+            <a data-toggle="collapse" href="#collapseExample" class="username">
+              <span>
+                {% if user.first_name == "" or user.last_name == "" %}
+                  {{ user.username }}
+                {% else %}
+                  {{ user.first_name }} {{ user.last_name }}
+                {% endif %}
+                <b class="caret"></b>
+              </span>
+            </a>
+            <div class="collapse {% if url_name  == 'profile' %} show {% endif %} " id="collapseExample">
+              <ul class="nav">
+                <li class="nav-item {% if url_name == 'profile'%} active {% endif %}" >
+                  <a class="nav-link" href="{% url 'profile' %}">
+                    <span class="sidebar-mini"> TK </span>
+                    <span class="sidebar-normal"> Thông Tin Tài Khoản</span>
+                  </a>
+                </li>
+                <li class="nav-item" >
+                  <a class="nav-link" href="{% url 'logout' %}">
+                    <span class="sidebar-mini"> ĐX </span>
+                    <span class="sidebar-normal"> Đăng Xuất</span>
+                  </a>
+                </li>                  
+              </ul>
+            </div>
+          </div>
+        </div>
+        <ul class="nav">
+          <li class="nav-item {% if url_name == 'dashboard' %} active {% endif %}">
+            <a class="nav-link" href="/">
+              <i class="material-icons">dashboard</i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+        </ul>
+        <ul class="nav">
+          <li class="nav-item {% if url_name == 'event-home' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'event-home' %}">
+              <i class="material-icons">event</i>
+              <p>Sự Kiện ATM</p>
+            </a>
+          </li>
+        </ul>
+        <ul class="nav">
+          <li class="nav-item {% if url_name == 'atm-home' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'atm-home' %}">
+              <i class="material-icons">account_balance</i>
+              <p>Thông Tin ATM</p>
+            </a>
+          </li>
+        </ul>
+        <ul class="nav">
+          <li class="nav-item {% if url_name == 'location-home' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'location-home' %}">
+              <i class="material-icons">my_location</i>
+              <p>Điểm Lắp Đặt</p>
+            </a>
+          </li>
+        </ul>
+        <ul class="nav">
+          <li class="nav-item {% if url_name == 'summary-home' or url_name == 'fee-cbc-home' or url_name == 'fee-cup-home' or url_name == 'fee-napas-home' or url_name == 'sum-fee-home' or url_name == 'summary-surcharge' or url_name == 'summary-fee' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'summary-home' %}">
+              <i class="material-icons">nat</i>
+              <p>Phân Bổ Phí</p>
+            </a>
+          </li>
+        </ul>
+        <ul class="nav">
+          <li class="nav-item {% if url_name == 'blog-home' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'blog-home' %}">
+              <i class="material-icons">rss_feed</i>
+              <p>Blog</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+      {% endwith %}
+      {% endif %}
+
+    </div>

@@ -1,0 +1,269 @@
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.media.js }}
+    <div class="modal-header">
+        <h5 class="modal-title">CẬP NHẬT SỰ KIỆN <span class="text-rose text-uppercase title-atms">{{ event.name }}</span></h5>
+        {% if event.status == 'new' %}
+            <span class="badge badge-primary">
+        {% elif event.status == 'process' %}
+            <span class="badge badge-danger">
+        {% elif event.status == 'complete' %}
+            <span class="badge badge-warning">
+        {% else %}
+            <span class="badge badge-success">
+        {% endif %}
+        {{ event.get_status_display }}</span>
+    </div>
+    <div class="modal-body">
+        <div class="row event-font">
+            <div class="col-md-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="material-icons">api</i>
+                        </span>
+                    </div>
+                    {{ event.name.machine_no }}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="material-icons">coronavirus</i>
+                        </span>
+                    </div>
+                    {{ event.name.terminal_id }}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="material-icons">event_available</i>
+                        </span>
+                    </div>
+                    {{ event.date_create|date:'d/m/Y H:i' }}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="material-icons">face</i>
+                        </span>
+                    </div>
+                    {{ event.author }}
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                        <i class="material-icons">contacts</i>
+                        </div>
+                        <h4 class="card-title">Thông tin Sự Kiện</h4>
+                    </div>
+                    <div class="card-body ">
+                        
+                        <div class="row">
+                            <label class="col-md-4 col-form-label text-info">Tên Sự Kiện</label>
+                            <div class="col-md-8">
+                                <div class="form-group has-default">
+                                    {{ form.error }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-4 col-form-label text-info">Trạng Thái ATM</label>
+                            <div class="col-md-8">
+                                <div class="form-group has-default">
+                                    {{ form.status_atm }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-4 col-form-label text-info">Độ Ưu tiên</label>
+                            <div class="col-md-8">
+                                <div class="form-group has-default">
+                                    {{ form.priority }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                        <i class="material-icons">contacts</i>
+                        </div>
+                        <h4 class="card-title">Xử Lý Sự Kiện</h4>
+                    </div>
+                    <div class="card-body ">
+                        <div class="row">
+                            <label class="col-md-4 col-form-label text-info">Nội Dung Xử Lý</label>
+                            <div class="col-md-8">
+                                <div class="form-group has-default">
+                                    {{ comment_form }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-4 col-form-label text-info">Nhân Viên Xử Lý</label>
+                            <div class="col-md-8">
+                                <div class="form-group has-default">
+                                    {{ form.handling_staff_event }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-4 col-form-label text-info">Ngày Hoàn Thành</label>
+                            <div class="col-md-8">
+                                <div class="form-group has-default">
+                                    {{ form.date_complete }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        {{ form.report24h }} BC 24H
+                                        <span class="form-check-sign">
+                                            <span class="check"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        {{ form.end_funds }} Cất Tạm Tiền
+                                        <span class="form-check-sign">
+                                            <span class="check"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        {{ form.replace_components }} Thay LKTB
+                                        <span class="form-check-sign">
+                                            <span class="check"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        {{ form.to_funds }} Chờ TQ Lại
+                                        <span class="form-check-sign">
+                                            <span class="check"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                        <i class="material-icons">contacts</i>
+                        </div>
+                        <h4 class="card-title">Thông Tin Xử lý</h4>
+                    </div>
+                    <div class="card-body ">
+                        <div class="overflow"> 
+                            {% if comments or event.supervisor_note %}
+                                {% if comments %}
+                                    {% for comment in comments %}
+                                        <div class="card bg-info">
+                                            <div class="card-body">
+                                                <span class="card-text">{{ comment.content|safe|linebreaks }}</span>
+                                                <div class="card-stats">
+                                                    <div class="stats small">
+                                                        <i class="material-icons">person</i> {{ comment.staff }}
+                                                    </div>
+                                                    <div class="stats ml-auto small">
+                                                        <i class="material-icons">update</i> {{ comment.create_on|date:'d/m/Y H:i' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}    
+                                
+                                {% if event.supervisor_note %}
+                                    <div class="card bg-rose">
+                                        <div class="card-body">
+                                            <span class="card-text">{{ event.supervisor_note|safe|linebreaks }}</span>
+                                            <div class="card-stats">
+                                                <div class="stats small">
+                                                    <i class="material-icons">person</i> {{ event.author }}
+                                                </div>
+                                                <div class="stats ml-auto small">
+                                                    <i class="material-icons">update</i> {{ event.date_create|date:'d/m/Y H:i' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <p class="card-text">Chưa có thông tin xử lý...!</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        {% if event.date_close %}
+            <div class="mr-auto ">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <button type="submit" class="btn btn-warning" id='bt_date_close_restore' value='bt_date_close'>Khôi Phục</button>
+                        </span>
+                    </div>
+                    <span class="disabled">{{ form.date_close }}<span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary disabled">Cập Nhật</button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+        {% else %}
+            <div class="mr-auto ">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            {% if event.date_complete %}
+                                <button type="submit" class="btn btn-success" id='bt_date_close' value='bt_date_close'>Kết Thúc</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-danger" id='bt_date_close' value='bt_date_close'>Kết Thúc</button>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <span class="disabled">{{ form.date_close }}<span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+        {% endif %}
+    </div>
+</form>
+
+
+

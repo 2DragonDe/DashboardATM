@@ -1,0 +1,70 @@
+<form method="post" action="">
+  {% csrf_token %}
+  
+  {{ form.media.js }}
+  <div class="modal-header">
+    <h5 class="modal-title">CẬP NHẬT PHÍ RETURN SURCHARGE</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card ">
+      <div class="card-header card-header-rose card-header-icon">
+        <div class="card-icon">
+          <i class="material-icons">contacts</i>
+        </div>
+      </div>
+      <div class="card-body ">
+        <div class="row">
+          <label class="col-md-2 col-form-label">Branch</label>
+          <div class="col-md-10">
+            <div class="form-group has-default" readonly>
+              {{ form.BRANCH }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-md-2 col-form-label">ATM Name</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.ATMNAME }}
+            </div>
+          </div>
+          <label class="col-md-2 col-form-label">Terminal ID</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.TERMINALID }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-md-2 col-form-label">Product Name</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.PRODUCTNAME }}
+            </div>
+          </div>
+          <label class="col-md-2 col-form-label">Surcharge Fee</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.SURCHARGEFEE }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-md-2 col-form-label">Return Fee</label>
+          <div class="col-md-10">
+            <div class="form-group has-default">
+              {{ form.fee_return }}
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+          
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Save changes</button>
+    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  </div>
+</form>

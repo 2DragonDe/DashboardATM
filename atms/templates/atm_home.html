@@ -1,0 +1,272 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+    Thông Tin ATM/CDM
+{% endblock title %}
+
+{% block stylesheets %}
+<style>
+  .title-atms {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .select2-selection__rendered {
+    font-size: 14px;
+  }
+  .alert-atm {
+      display: inline-block;
+      margin: 15px auto;
+      position: fixed;
+      transition: all 0.5s ease-in-out 0s;
+      z-index: 1031;
+      top: 20px;
+      right: 20px;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}    
+  <div>
+      {% if messages %}
+          {% for message in messages %}
+              <div class="col-11 col-md-4 alert alert-success alert-with-icon alert-atm" data-notify="container">
+                  <i class="material-icons" data-notify="icon">notifications</i>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="material-icons">close</i>
+                  </button>
+                  <span data-notify="icon" class="now-ui-icons ui-1_bell-53"></span>
+                  <span data-notify="message">{{ message }}</span>
+              </div>
+          {% endfor %}            
+      {% endif %}
+  </div>
+  <div class="modal fade" id="create-modal"  role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+          </div>
+      </div>
+      </div>
+
+      <div class="modal fade"  role="dialog" id="modal">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content"></div>
+      </div>
+  </div>
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-primary card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">my_location</i>
+              </div>
+              <p class="card-category">Tổng Số ATM/CDM</p>
+              <h3 class="card-title">{{ total_atms }}</h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">healing</i> Có mặt trên khắp cả nước
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">nature</i>
+              </div>
+              <p class="card-category">Tổng Số ATM</p>
+              <h3 class="card-title">{{ total_atm }}</h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">filter_vintage</i> Các máy rút tiền
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-success card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">nature_people</i>
+              </div>
+              <p class="card-category">Tổng Số CDM</p>
+              <h3 class="card-title">{{ total_cdm }}</h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">flare</i> Các máy nộp tiền tự động
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-warning card-header-icon">
+              <div class="card-icon">
+                <i class="fa fa-twitter"></i>
+              </div>
+              <p class="card-category">Tổng ...</p>
+              <h3 class="card-title"></h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">warning</i> Khu vực trọng điểm
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <h4 class="card-title">THÔNG TIN ATM/CDM</h4>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                  <button id="atm-create" class="bs-modal btn btn-primary" type="button" name="button" data-form-url="{% url 'atm-create' %}">
+                      <i class="material-icons">add_box</i> Thêm ATM/CDM
+                  </button>
+              </div>
+              <div class="material-datatables">
+                <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                  <thead>                                        
+                    <tr>
+                      <th>#</th>
+                      <th>Tên ATM</th>                         
+                      <th>Gateway</th>
+                      <th>IP</th>
+                      <th>Camera IP</th>
+                      <th>Điện Thoại</th>
+                      <th>Tỉnh/Thành Phố</th>
+                      <th>Vị Trí</th>                                             
+                      <th class="text-right disabled-sorting">Action</th>
+                    </tr>
+                  </thead>
+                    <tfoot>
+                      <tr>
+                        <th>STT</th>
+                        <th>Tên ATM</th>                          
+                        <th>Gateway</th>
+                        <th>IP</th>
+                        <th>Camera IP</th>
+                        <th>Điện Thoại</th>
+                        <th>Tỉnh/Thành Phố</th>
+                        <th>Vị Trí</th>   
+                        <th class="text-right">Action</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      {% for atm in atms %}
+                        <tr>
+                          <th>{{ forloop.counter }}</th>
+                          <td class="text-primary">{{ atm.name }}</td>  
+                          <td>{{ atm.gateway }}</td>
+                          <td>{{ atm.ip }}</td>
+                          <td>{{ atm.camera_ip }}</td>
+                          <td>{{ atm.location.contact01 }}</td>
+                          <td>{{ atm.location.city }}</td>
+                          <td>{{ atm.location.get_area_display }}</td>
+                          <td class="text-right ">
+                            <button type="button" class="bs-modal btn btn-sm btn-info btn-just-icon btn-link" data-form-url="{% url 'atm-read' atm.pk %}">
+                              <i class="material-icons">visibility</i>
+                            </button>
+                            <button type="button" class="bs-modal btn btn-sm btn-warning btn-just-icon btn-link" data-form-url="{% url 'atm-update' atm.pk %}">
+                              <i class="material-icons">create</i>
+                            </button>
+                            <button type="button" class="bs-modal btn btn-sm btn-danger btn-just-icon btn-link" data-form-url="{% url 'atm-delete' atm.pk %}">
+                              <i class="material-icons">close</i>
+                            </button>
+                          </td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="4">Chưa có thông tin! <a href="#">Tạo thông tin ATM ngay!</a>.</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>        
+    
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+    $('#datatables').DataTable({
+      "pagingType": "full_numbers",
+      "lengthMenu": [
+      [10, 25, 50, -1],
+      [10, 25, 50, "All"]
+      ],
+      responsive: true,
+      search: {
+        smart: true
+      },
+      language: {
+        search: "TÌM KIẾM: ",
+        searchPlaceholder: "Thông Tin ATM...",
+      }
+    });
+    var table = $('#datatable').DataTable();
+  });
+
+  //Hàm tự động render modal cho class bs-modal
+  $(".bs-modal").each(function () {
+      $(this).modalForm({formURL: $(this).data("form-url")});
+  });  
+  
+  //Ẩn thông báo khi tạo mới, cập nhật hoặc xoá
+  $(".alert").fadeTo(5000, 500).slideUp(500, function () {
+      $(".alert").slideUp(500);
+  
+  }); 
+
+  $('#modal').on('shown.bs.modal', function () {
+    //Chèn select2 vào
+    $('#id_location').select2({
+      width: '100%',
+      placeholder: "Chọn điểm ATM/CDM",
+    });
+
+    //Chèn Selectpicker vào
+    $('.selectpicker').selectpicker();
+
+    //Chèn datepicker vào (Nếu muốn chèn thêm time: datetimepicker )
+    md.initFormExtendedDatetimepickers();
+    
+
+    //Focus vào ô đầu tiên
+    setTimeout(function (){
+      $('#id_name').focus();
+    }, 500);
+
+    atm_plug.initMaterialWizard();
+    
+    //Tự động mở drop khi nhấn tab
+    $(document).on('focus', '.select2.select2-container', function (e) {
+      var isOriginalEvent = e.originalEvent // don't re-open on closing focus event
+      var isSingleSelect = $(this).find(".select2-selection--single").length > 0 // multi-select will pass focus to input
+
+      if (isOriginalEvent && isSingleSelect) {
+          $(this).siblings('select:enabled').select2('open');
+      } 
+    }); 
+  }); 
+</script>  
+{% endblock javascripts %}
+
+

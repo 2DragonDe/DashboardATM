@@ -1,0 +1,372 @@
+{% extends 'layouts/base.html' %}
+{% load humanize %}
+
+{% block title %}
+    Phí Phân Bổ Cho KPP
+{% endblock title %}
+
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}   
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-primary card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">generating_tokens</i>
+              </div>
+              <p class="card-category">Tổng Phí Phân Bổ KPP</p>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{ fee_sum|intcomma }} VNĐ</h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">healing</i> Tổng Phí Phân Bổ Cho {{ branch_sum }} KPP
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">local_atm</i>
+              </div>
+              <p class="card-category">Tổng Phí Nội Mạng</p>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{ atm_sum|intcomma }} VNĐ</h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">filter_vintage</i> Phí Nội Mạng Phân Bổ KPP
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">account_balance_wallet</i>
+              </div>
+              <p class="card-category">Tổng Phí Phụ Thu</p>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{ surcharge_sum|intcomma }} VNĐ</h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">flare</i> Phí Surcharge Phân Bổ KPP
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">price_change</i>
+              </div>
+              <p class="card-category">Tổng Phí Thẻ Napas</p>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{ napas_sum|intcomma }} VNĐ</h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">warning</i> Phí Thẻ Napas Phân Bổ KPP
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <h4 class="card-title">SỐ LIỆU PHÂN BỔ PHÍ CHO KÊNH PHÂN PHỐI</h4>
+                <span class="text-rose">KỲ BÁO CÁO TỪ: {{ from_date|cut:"FromDate:" }} ĐẾN: {{ to_date|cut:"ToDate:" }}</span>
+            </div>
+            <div class="card-body">
+              
+              <div class="material-datatables">
+                <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                  <thead>                                        
+                    <tr>
+                      <th>#</th>
+                      <th>Tên Chi Nhánh</th>                         
+                      <th>Mã Đơn Vị</th>
+                      <th>Mã TCBS</th>
+                      <th>Phí Nội Mạng</th>
+                      <th>Phí Phụ Thu</th>
+                      <th>Phí Napas</th>
+                      <th>Tổng Phí</th>                                             
+                    </tr>
+                  </thead>
+                    <tfoot>
+                      <tr>
+                        <th>STT</th>
+                        <th>Tên Chi Nhánh</th>                         
+                        <th>Mã Đơn Vị</th>
+                        <th>Mã TCBS</th>
+                        <th>{{ atm_sum|intcomma }} </th>
+                        <th>{{ surcharge_sum|intcomma }}</th>
+                        <th>{{ napas_sum|intcomma }} </th>
+                        <th>{{ fee_sum|intcomma }}</th>  
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      {% for fee in fees %}
+                        <tr>
+                          <td></td>
+                          <td class="text-primary">{{ fee.name_branch }}</td>  
+                          <td>{{ fee.code_branch }}</td>
+                          <td>{{ fee.code_unit }}</td>
+                          <td>{{ fee.fee_atm|intcomma }} </td>
+                          <td>{{ fee.fee_surcharg|intcomma }} </td>
+                          <td>{{ fee.fee_napas|intcomma }} </td>
+                          <td>{{ fee.fee_sum|intcomma }} </td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="4">Dữ liệu chưa được import! Vui lòng cập nhật lại dữ liệu.</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-rose card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">account_balance</i>
+                </div>
+                <h4 class="card-title">SỐ LIỆU PHÂN BỔ PHÍ THEO ATM</h4>
+                <span class="text-rose">KỲ BÁO CÁO TỪ: {{ from_date|cut:"FromDate:" }} ĐẾN: {{ to_date|cut:"ToDate:" }}</span>
+            </div>
+            <div class="card-body">
+              
+              <div class="material-datatables">
+                <table id="table-atm" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                  <thead>                                        
+                    <tr>
+                      <th>#</th>
+                      <th>Mã Dơn vị</th>                         
+                      <th>Tên ATM</th>
+                      <th>Terminal ID</th>
+                      <th>Phí Nội Mạng</th>
+                      <th>Phí Surcharge</th>  
+                      <th>Phí Napas</th>
+                      <th>Tổng Phí </th>                                            
+                    </tr>
+                  </thead>
+                    <tfoot>
+                      <tr>
+                        <th>STT</th>
+                        <th>Mã Đơn Vị</th>                         
+                        <th>Tên ATM</th>
+                        <th>Terminal ID</th>
+                        <th>{{ sum_atm_fee|intcomma }} </th>  
+                        <th>{{ sum_surcharge_fee|intcomma }}</th>
+                        <th>{{ sum_napas_fee|intcomma }} </th>
+                        <th>{{ sum_fee|intcomma }}</th>  
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      {% for atm in fee_atm %}
+                        <tr>
+                          <td></td>
+                          <td class="text-primary">{{ atm.branch }}</td>  
+                          <td>{{ atm.atm_name }}</td>
+                          <td>{{ atm.terminal_id }}</td>
+                          <td>{{ atm.atm_sum|intcomma }} </td>
+                          <td>{{ atm.surcharge_sum|intcomma }}</td>
+                          <td>{{ atm.napas_sum|intcomma }}</td>
+                          <td>{{ atm.fee_sum|intcomma }}</td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="4">Dữ liệu chưa được import! Vui lòng cập nhật lại dữ liệu.</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>        
+    
+{% endblock content %}
+
+{% block javascripts %}
+  <script>
+    $(document).ready(function() {
+      var table = $('#datatables').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+              extend: 'excelHtml5',
+              text: 'Xuất File Excel',
+              className: 'btn btn-info',
+              title: 'Phân Bổ Chi Phí Theo Kênh Phân Phối - 2DragonK',
+              filename: function(){
+                var d = new Date();
+                var y = d.getFullYear();
+                var m = d.getMonth();
+                var date = d.getDate();
+                return 'PhanBoChiPhiTheoKPP_' + date + m + y;
+              },
+            },
+            {
+              extend: 'pdfHtml5',
+              text: 'Xuất File PDF',
+              className: 'btn btn-warning',
+              title: 'Phân Bổ Chi Phí Theo Kênh Phân Phối - 2DragonK',
+              filename: function(){
+                var d = new Date();
+                var y = d.getFullYear();
+                var m = d.getMonth();
+                var date = d.getDate();
+                return 'PhanBoChiPhiTheoKPP_' + date + m + y;
+              },
+            }
+        ],
+        "order": [[3,"asc"]],
+        "pagingType": "full_numbers",
+        "lengthMenu": [
+        [10, 25, 50, -1],
+        [10, 25, 50, "All"]
+        ],
+        responsive: true,
+        search: {
+          smart: true
+        },
+        language: {
+          search: "TÌM KIẾM: ",
+          searchPlaceholder: "Thông Tin CN/PGD...",
+        }
+      });
+      table.on( 'order.dt search.dt', function () {
+      table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+        cell.innerHTML = i+1;
+      });
+      }).draw();
+
+      var table_atm = $('#table-atm').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+              extend: 'excelHtml5',
+              text: 'Xuất File Excel',
+              className: 'btn btn-info',
+              title: 'Phân Bổ Chi Phí Theo ATM - 2DragonK',
+              filename: function(){
+                var d = new Date();
+                var y = d.getFullYear();
+                var m = d.getMonth();
+                var date = d.getDate();
+                return 'PhanBoChiPhiTheoATM_' + date + m + y;
+              },
+            },
+            {
+              extend: 'pdfHtml5',
+              text: 'Xuất File PDF',
+              className: 'btn btn-warning',
+              title: 'Phân Bổ Chi Phí Theo ATM - 2DragonK',
+              filename: function(){
+                var d = new Date();
+                var y = d.getFullYear();
+                var m = d.getMonth();
+                var date = d.getDate();
+                return 'PhanBoChiPhiTheoATM_' + date + m + y;
+              },
+            }
+        ],
+        "order": [[1,"asc"]],
+        "pagingType": "full_numbers",
+        "lengthMenu": [
+        [10, 25, 50, -1],
+        [10, 25, 50, "All"]
+        ],
+        responsive: true,
+        search: {
+          smart: true
+        },
+        language: {
+          search: "TÌM KIẾM: ",
+          searchPlaceholder: "Thông Tin ATM...",
+        }
+      });
+
+      table_atm.on( 'order.dt search.dt', function () {
+      table_atm.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+        cell.innerHTML = i+1;
+      });
+      }).draw();
+
+    });
+
+    //Hàm tự động render modal cho class bs-modal
+    $(".bs-modal").each(function () {
+        $(this).modalForm({formURL: $(this).data("form-url")});
+    });  
+    
+    //Ẩn thông báo khi tạo mới, cập nhật hoặc xoá
+    $(".alert").fadeTo(5000, 500).slideUp(500, function () {
+        $(".alert").slideUp(500);
+    
+    }); 
+
+    $('#modal').on('shown.bs.modal', function () {
+      //Chèn select2 vào
+      $('#id_location').select2({
+        width: '100%',
+        placeholder: "Chọn điểm ATM/CDM",
+      });
+
+      //Chèn Selectpicker vào
+      $('.selectpicker').selectpicker();
+
+      //Chèn datepicker vào (Nếu muốn chèn thêm time: datetimepicker )
+      md.initFormExtendedDatetimepickers();
+      
+
+      //Focus vào ô đầu tiên
+      setTimeout(function (){
+        $('#id_name').focus();
+      }, 500);
+
+      atm_plug.initMaterialWizard();
+      
+      //Tự động mở drop khi nhấn tab
+      $(document).on('focus', '.select2.select2-container', function (e) {
+        var isOriginalEvent = e.originalEvent // don't re-open on closing focus event
+        var isSingleSelect = $(this).find(".select2-selection--single").length > 0 // multi-select will pass focus to input
+
+        if (isOriginalEvent && isSingleSelect) {
+            $(this).siblings('select:enabled').select2('open');
+        } 
+      }); 
+    }); 
+  </script>
+    
+{% endblock javascripts %}
+
+

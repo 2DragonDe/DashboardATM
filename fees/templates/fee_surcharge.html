@@ -1,0 +1,242 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+    Thông Tin ATM/CDM
+{% endblock title %}
+
+{% block stylesheets %}
+<style>
+  .title-atms {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .select2-selection__rendered {
+    font-size: 14px;
+  }
+  .alert-atm {
+      display: inline-block;
+      margin: 15px auto;
+      position: fixed;
+      transition: all 0.5s ease-in-out 0s;
+      z-index: 1031;
+      top: 20px;
+      right: 20px;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}    
+  <div>
+      {% if messages %}
+          {% for message in messages %}
+              <div class="col-11 col-md-4 alert alert-success alert-with-icon alert-atm" data-notify="container">
+                  <i class="material-icons" data-notify="icon">notifications</i>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="material-icons">close</i>
+                  </button>
+                  <span data-notify="icon" class="now-ui-icons ui-1_bell-53"></span>
+                  <span data-notify="message">{{ message }}</span>
+              </div>
+          {% endfor %}            
+      {% endif %}
+  </div>
+  <div class="modal fade" id="create-modal"  role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+          </div>
+      </div>
+      </div>
+
+      <div class="modal fade"  role="dialog" id="modal">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content"></div>
+      </div>
+  </div>
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-8 col-12 mr-auto ml-auto">
+            <h3 class="text-center text-primary">CÁC BƯỚC THỰC HIỆN TÍNH CHI PHÍ PHÂN BỔ CHO KPP</h3>
+            <div class="card text-center">
+              <div class="card-header card-header-rose text-center">
+                <ul class="nav nav-tabs justify-content-center">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'summary-home' %}">BƯỚC 01</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'fee-cbc-home' %}">BƯỚC 02</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'fee-qr-home' %}">BƯỚC 03</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'fee-cup-home' %}">BƯỚC 04</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'fee-napas-home' %}">BƯỚC 05</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'summary-surcharge' %}"><i class="material-icons">face</i> BƯỚC 06</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sum-fee-home' %}">BƯỚC 07</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <h4 class="card-title">ĐIỀU CHỈNH PHÍ HOÀN TRẢ CỦA PHÍ SURCHARGE</h4>
+                <p class="card-text">Nhập Terminal ID để tìm kiếm ATM cần thay đổi phí hoàn trả</p>
+                  <form method="GET">
+                    <div class="form-group">
+                      <input  class="form-control" id="FeeReturn" name="FeeReturn"  placeholder="Nhập Terminal ID cần tìm...">
+                    </div>
+                    <button type="submit" value="Submit" class="btn btn-primary">Tìm Kiếm</button>
+                    <a href="{% url 'sum-fee-home' %}" class="btn btn-info">Tiếp Tục</a>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <h4 class="card-title">THÔNG TIN PHÍ SURCHARGE</h4>
+            </div>
+            <div class="card-body">
+              <div class="material-datatables">
+                <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                  <thead>                                        
+                    <tr>
+                      <th>#</th>
+                      <th>Branch</th>                         
+                      <th>ATM Name</th>
+                      <th>Termianl ID</th>
+                      <th>Product Name</th>
+                      <th>Surcharge Fee</th>     
+                      <th>Return Fee</th>                                              
+                      <th class="text-right disabled-sorting">Action</th>
+                    </tr>
+                  </thead>
+                    <tfoot>
+                      <tr>
+                        <th>STT</th>
+                        <th>Branch</th>                         
+                        <th>ATM Name</th>
+                        <th>Termianl ID</th>
+                        <th>Product Name</th>
+                        <th>Surcharge Fee</th>     
+                        <th>Return Fee</th>     
+                        <th class="text-right">Action</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      {% for sum in sum01s %}
+                        <tr>
+                          <td></td>
+                          <td>{{ sum.BRANCH }} </td>
+                          <td>{{ sum.ATMNAME }} </td>
+                          <td>{{ sum.TERMINALID }} </td>
+                          <td>{{ sum.PRODUCTNAME }}</td>
+                          <td>{{ sum.SURCHARGEFEE }}</td>
+                          <td>{{ sum.fee_napas }}</td>
+                          <td class="text-right ">
+                            <button type="button" class="bs-modal btn btn-sm btn-warning btn-just-icon btn-link" data-form-url="{% url 'summary-update' sum.pk %}">
+                              <i class="material-icons">create</i>
+                            </button>
+                            </button>
+                          </td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="4">Chưa có thông tin. Vui lòng nhập Terminal ID để hiển thị...</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>        
+    
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+    var table = $('#datatables').DataTable({
+      "pagingType": "full_numbers",
+      "order": [[5,"desc"]],
+      "lengthMenu": [
+      [10, 25, 50, -1],
+      [10, 25, 50, "All"]
+      ],
+      responsive: true,
+      search: {
+        smart: true
+      },
+      language: {
+        search: "TÌM KIẾM: ",
+        searchPlaceholder: "Thông Tin ATM...",
+      }
+    });
+
+    table.on( 'order.dt search.dt', function () {
+      table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+        cell.innerHTML = i+1;
+      });
+    }).draw();
+  });
+
+  //Hàm tự động render modal cho class bs-modal
+  $(".bs-modal").each(function () {
+      $(this).modalForm({formURL: $(this).data("form-url")});
+  });  
+  
+  //Ẩn thông báo khi tạo mới, cập nhật hoặc xoá
+  $(".alert").fadeTo(5000, 500).slideUp(500, function () {
+      $(".alert").slideUp(500);
+  
+  }); 
+
+  $('#modal').on('shown.bs.modal', function () {
+    //Chèn select2 vào
+    $('#id_location').select2({
+      width: '100%',
+      placeholder: "Chọn điểm ATM/CDM",
+    });
+
+    //Chèn Selectpicker vào
+    $('.selectpicker').selectpicker();
+
+    //Chèn datepicker vào (Nếu muốn chèn thêm time: datetimepicker )
+    md.initFormExtendedDatetimepickers();
+    
+
+    //Focus vào ô đầu tiên
+    setTimeout(function (){
+      $('#id_fee_return').focus();
+    }, 500);
+
+    atm_plug.initMaterialWizard();
+    
+    //Tự động mở drop khi nhấn tab
+    $(document).on('focus', '.select2.select2-container', function (e) {
+      var isOriginalEvent = e.originalEvent // don't re-open on closing focus event
+      var isSingleSelect = $(this).find(".select2-selection--single").length > 0 // multi-select will pass focus to input
+
+      if (isOriginalEvent && isSingleSelect) {
+          $(this).siblings('select:enabled').select2('open');
+      } 
+    }); 
+  }); 
+</script>  
+{% endblock javascripts %}
+
+

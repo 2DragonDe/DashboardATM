@@ -1,0 +1,27 @@
+<div class="card card-signup card-plain">
+    <div class="modal-header">
+        <div class="card-header card-header-primary text-center">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <i class="material-icons">clear</i>
+            </button>
+            <h3 class="card-title">{{ location.name }}</h3>
+        </div>
+    </div>
+    <div class="modal-body">
+        <p><span class="text-info h6 card-category loca"><i class="material-icons">location_on</i> Địa Chỉ</span>: {{ location.street }}, {{ location.ward }}, {{ location.district }}, {{ location.city }}</p>
+        <p><span class="text-info h6 card-category loca"><i class="material-icons">apartment</i> Đơn Vị Quản Lý</span>: {{ location.manager }}</p>
+        <p><span class="text-info h6 card-category loca"><i class="material-icons">currency_exchange</i> Đơn Vị Tiếp Quỹ</span>: {{ location.fundraiser }}</p>
+        <p><span class="text-info h6 card-category loca"><i class="material-icons">pin_drop</i> Vị Trí</span>: {{ location.get_area_display }}</p>
+        <p><span class="text-info h6 card-category loca"><i class="material-icons">all_out</i> Thuộc đối tượng</span>: {% if location.forcus %} Trọng Điểm {% else %} Bình Thường {% endif %} </p>
+        <p><span class="text-info h6 card-category loca"><i class="material-icons">contact_phone</i> Thông tin liên hệ</span>:  
+            {% if location.contact01 %} {{ location.contact01 }} | {% endif %}
+            {% if location.contact02 %} {{ location.contact02 }} | {% endif %}
+            {% if location.contact03 %} {{ location.contact03 }} | {% endif %}
+            {% if location.contact04 %} {{ location.contact04 }} {% endif %}
+        </p>
+        <p><span class="text-info h6 card-category loca"><i class="material-icons">support</i> Trạng Thái</span>: {{ location.get_status_display }}</p>
+    </div>
+    <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
+    </div>
+</div>

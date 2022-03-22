@@ -1,0 +1,314 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+    Sự Kiện ATM/CDM
+{% endblock title %}
+
+{% block stylesheets %}
+<style>
+  .title-atms {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+ 
+  .event-font {
+    font-size: 13px;
+  }
+
+  .overflow {
+    #position: relative;
+    width: auto;
+    height: 390px;
+    overflow: auto;
+  }
+
+  .select2-selection__rendered {
+    font-size: 14px;
+  }
+  
+  .alert-atm {
+      display: inline-block;
+      margin: 15px auto;
+      position: fixed;
+      transition: all 0.5s ease-in-out 0s;
+      z-index: 1031;
+      top: 20px;
+      right: 20px;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}    
+  <div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="col-11 col-md-4 alert alert-success alert-with-icon alert-atm" data-notify="container">
+          <i class="material-icons" data-notify="icon">notifications</i>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="material-icons">close</i>
+          </button>
+          <span data-notify="icon" class="now-ui-icons ui-1_bell-53"></span>
+          <span data-notify="message">{{ message }}</span>
+        </div>
+      {% endfor %}            
+    {% endif %}
+  </div>
+  <div class="modal fade" id="create-modal"  role="dialog" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal" role="dialog" aria-hidden="true">
+    <div class=" modal-dialog modal-lg" role="document" >
+      <div class="modal-content"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <h4 class="card-title">SỰ KIỆN ATM TẠM NGƯNG HOẠT ĐỘNG</h4>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                  <button id="atm-create" class="bs-modal btn btn-primary" type="button" name="button" data-form-url="{% url 'event-create' %}">
+                      <i class="material-icons">add_box</i> Tạo Sự Kiện
+                  </button>
+              </div>
+              <div class="material-datatables">
+                <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                  <thead>                                        
+                    <tr>
+                      <th>#</th>
+                      <th style="width: 20%">Tên ATM</th>                         
+                      <th style="width: 25%">Sự Kiện</th>
+                      <th style="width: 10%">Phát Hiện</th>
+                      <th style="width: 30%">Xử Lý</th>   
+                      <th style="width: 10%">Status</th>                  
+                      <th style="width: 5%" class="text-right disabled-sorting">Action</th>
+                    </tr>
+                  </thead>
+                    <tfoot>
+                      <tr>
+                        <th>STT</th>
+                        <th>Tên ATM</th>                         
+                        <th>Sự Kiện</th>
+                        <th>Phát Hiện</th>
+                        <th>Xử Lý</th>
+                        <th>Trạng Thái</th>
+                        <th class="text-right">Action</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      {% for event in events %}
+                        <tr>
+                            <td></td>
+                            <td>
+                              <a href="javascript:;" class="bs-modal" data-form-url="{% url 'event-update' event.pk %}">
+                                {{ event.name }}
+                              </a>
+                            </td>  
+                            <td>
+                                {% if event.status_atm == 'out_services' %}
+                                    <span class="badge badge-warning stats">OUT</span>
+                                {% elif event.status_atm == 'in_services' %}
+                                    <span class="badge badge-info stats">INS</span>
+                                {% else %}
+                                    <span class="badge badge-danger">OFF</span>
+                                {% endif %}
+                                {{ event.error }}
+                                <br>
+                                {% if event.supervisor_note %}
+                                  <span class="small text-info">{{ event.supervisor_note }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ event.date_create|date:'m/d/Y H:i' }}</td>
+                            <td>
+                              {% if event.comments.all %}
+                                {% for comment in event.comments.all %}
+                                  {% if forloop.last %}
+                                    {{ comment.content}}
+                                  {% endif %}
+                                {% endfor %}
+                              {% else %}
+                                {{ event.supervisor_note }}
+                              {% endif %}
+                              
+                              <br>
+                              {% if event.report24h %}
+                                <span class="badge badge-default" >BC 24h</span>
+                              {% endif %}
+                              {% if event.replace_components %}
+                                <span class="badge badge-default" >Thay LKTB</span>
+                              {% endif %}
+                              {% if event.end_funds %}
+                                <span class="badge badge-default" >Cất Tiền</span>
+                              {% endif %}
+                              {% if event.to_funds %}
+                                <span class="badge badge-default" >Tiếp Quỹ</span>
+                              {% endif %}
+                              {% if event.handling_staff_event %}
+                                
+                                <span class="small text-info">NVXL: {{ event.handling_staff_event }}</span>
+                              {% endif %}
+                              
+                            </td>
+                            <td class="text-center">
+                              {% if event.status == 'new' %}
+                                  <span class="badge badge-primary">
+                              {% elif event.status == 'process' %}
+                                  <span class="badge badge-danger">
+                              {% elif event.status == 'complete' %}
+                                  <span class="badge badge-success">
+                              {% else %}
+                                  <span class="badge badge-default">
+                              {% endif %}
+                              {{ event.get_status_display }}</span>
+                            </td>
+                            <td class="text-right ">
+                              <div class="btn-group">
+                                <button type="button" class="bs-modal btn btn-sm btn-info" data-form-url="{% url 'event-update' event.pk %}"><i class="material-icons">create</i></button>
+                                <button type="button" class="btn btn-sm btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                  <a class="dropdown-item" href="javascript:;">Xem Thông Tin</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="bs-modal dropdown-item" data-form-url="{% url 'event-delete' event.pk %}" href="javascript:;">Xoá Sự Kiện</a>
+                                </div>
+                              </div>
+                            </td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="4">Chưa có sự kiện! <a href="#">Tạo sự kiện ATM ngay!</a>.</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>        
+    
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+    var table = $('#datatables').DataTable({
+      //scrollCollapse: true,
+      paging: true,
+      //scrollY: '350px',
+      "order": [[3,"desc"]],
+      "pagingType": "full_numbers",
+      "lengthMenu": [
+      [10, 25, 50, -1],
+      [10, 25, 50, "All"]
+      ],
+      responsive: true,
+      language: {
+        search: "TÌM KIẾM: ",
+        searchPlaceholder: "Thông tin sự kiện...",
+      }
+    });
+    
+    table.on( 'order.dt search.dt', function () {
+      table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+        cell.innerHTML = i+1;
+      });
+    }).draw();
+  });
+
+  //Hàm tự động render modal cho class bs-modal
+  $(".bs-modal").each(function () {
+      $(this).modalForm({formURL: $(this).data("form-url")});
+  });  
+  
+  //Ẩn thông báo khi tạo mới, cập nhật hoặc xoá
+  $(".alert").fadeTo(5000, 500).slideUp(500, function () {
+      $(".alert").slideUp(500);
+  
+  }); 
+
+  
+  $('#modal').on('shown.bs.modal', function () {
+    //Chèn select2 vào
+    $('#id_name').select2({
+      width: '100%',
+      placeholder: "Chọn Tên ATM/CDM",
+    });
+    $('#id_error').select2({
+      width: '100%',
+      placeholder: "Chọn Sự Kiện Phát Sinh",
+    });
+    $('#id_handling_staff_event').select2({
+      width: '100%',
+      placeholder: "Chọn Nhân Viên Xử Lý",
+    });
+
+    //Chèn Selectpicker vào
+    $('.selectpicker').selectpicker();
+
+    //Chèn datepicker vào (Nếu muốn chèn thêm time: datetimepicker )
+    md.initFormExtendedDatetimepickers();
+
+    setTimeout(function (){
+      $('#id_name, #id_content').focus();
+    }, 200);
+
+    atm_plug.initMaterialWizard();
+    
+    //Tự động mở drop khi nhấn tab
+    $(document).on('focus', '.select2.select2-container', function (e) {
+      var isOriginalEvent = e.originalEvent // don't re-open on closing focus event
+      var isSingleSelect = $(this).find(".select2-selection--single").length > 0 // multi-select will pass focus to input
+
+      if (isOriginalEvent && isSingleSelect) {
+          $(this).siblings('select:enabled').select2('open');
+      } 
+    }); 
+    //Xóa class 'ps' div main-panel
+    $('.main-panel').removeClass('ps');  
+
+    //Chèn ngày giờ vào date_close khi nhấn nút
+    $('#bt_date_close').click(function(){
+      var time = moment().format('MM/DD/YYYY HH:mm') 
+      $('#id_date_close').val(time);  
+    });
+    $('#bt_date_close_restore').click(function(){
+      var time = "" 
+      $('#id_date_close').val(time);  
+    });
+  });
+
+  $('#modal').on('hidden.bs.modal', function() {
+    $('.main-panel').addClass('ps');
+  });
+
+  $(window).scroll(function() {
+  sessionStorage.scrollTop = $(this).scrollTop();
+});
+
+$(document).ready(function() {
+  if (sessionStorage.scrollTop != "undefined") {
+    $(window).scrollTop(sessionStorage.scrollTop);
+  }
+});
+
+</script>  
+
+{% endblock javascripts %}
+
+

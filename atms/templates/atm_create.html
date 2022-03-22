@@ -1,0 +1,268 @@
+{% load widget_tweaks %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">TẠO THÔNG TIN ATM/CDM</h3>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="wizard-container">
+      <div class="card card-wizard active" data-color="rose" id="wizardProfile">
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="card-header text-center">
+          </div>
+          <div class="wizard-navigation">
+            <ul class="nav nav-pills">
+              <li class="nav-item">
+                <a class="nav-link active" href="#about" data-toggle="tab" role="tab">
+                  Thông Tin Chung
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#account" data-toggle="tab" role="tab">
+                  Thông Tin Mạng
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#address" data-toggle="tab" role="tab">
+                  Thông Tin Vận Hành
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="tab-pane active" id="about">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">apartment</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.name }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">shutter_speed</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.name_vynamic }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">filter_vintage</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.name_way4 }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">coronavirus</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.terminal_id }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">api</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.machine_no }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">location_on</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.location }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="account">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">signal_cellular_alt</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.gateway }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">storage</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.ip }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">photo_camera</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.camera_ip }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="address">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">book_online</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.date_setup }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">fact_check</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.date_operate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">flutter_dash</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.ghost_vesion }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">privacy_tip</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.security_soft }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">settings_input_composite</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.date_deactivated }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group form-control-lg">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="material-icons">support</i>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        {{ form.status }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="mr-auto">
+              <input type="button" class="btn btn-previous btn-fill btn-default btn-wd disabled" name="previous" value="Previous">
+            </div>
+            <div class="ml-auto">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <input type="button" class="btn btn-next btn-fill btn-rose btn-wd" name="next" value="Next">
+              <input type="submit" class="btn btn-finish btn-fill btn-rose btn-wd" name="finish" value="Finish" style="display: none;">                      
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{{ form.media.js }}

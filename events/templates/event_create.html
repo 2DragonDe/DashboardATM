@@ -1,0 +1,77 @@
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.media.js }}
+    <div class="modal-header">
+        <h5 class="modal-title">TẠO THÔNG TIN SỰ KIỆN ATM/CDM</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                        <i class="material-icons">contacts</i>
+                        </div>
+                        <h4 class="card-title">Thông tin</h4>
+                    </div>
+                    <div class="card-body ">
+                        <div class="row">
+                            <label class="col-md-3 col-form-label text-info">Tên ATM</label>
+                            <div class="col-md-9">
+                                <div class="form-group has-default">
+                                    {{ form.name }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-3 col-form-label text-info">Tên Sự Kiện</label>
+                            <div class="col-md-9">
+                                <div class="form-group has-default">
+                                    {{ form.error }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-3 col-form-label text-info">Ghi Chú</label>
+                            <div class="col-md-9">
+                                <div class="form-group has-default">
+                                    {{ form.supervisor_note }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                        <i class="material-icons">contacts</i>
+                        </div>
+                        <h4 class="card-title">Tùy Chọn</h4>
+                    </div>
+                    <div class="card-body ">                        
+                        <div class="input-group">
+                            {{ form.status_atm }}
+                        </div>
+                        <div class="input-group">
+                            {{ form.status }}
+                        </div>
+                        <div class="input-group">
+                            {{ form.priority }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+</form>
+
+

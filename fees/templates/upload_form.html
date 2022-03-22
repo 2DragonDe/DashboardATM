@@ -1,0 +1,112 @@
+
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+    Thông Tin ATM/CDM
+{% endblock title %}
+
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}    
+  <div>
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+  </div>
+  <div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-12 mr-auto ml-auto">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h3 class="card-title text-center">IMPORT FILE</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-center">{{ header }} </p>
+                        <form action="" enctype="multipart/form-data"  method="post">
+                            <div class="form-group form-file-upload form-file-multiple">
+                                <input type="file" name="file" required id="id_file" multiple="" class="inputFileHidden">
+                                <div class="input-group">
+                                    <input type="text" class="form-control inputFileVisible" placeholder="Vui lòng chọn file...">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-fab btn-round btn-primary">
+                                            <i class="material-icons">attach_file</i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            {% csrf_token %}
+                            <div class="row">
+                            {% with request.resolver_match.url_name as url_name %}
+                              <div class="col-md-4">
+                                {% if url_name == 'import-fee-summary' %}
+                                  <a href="{% url 'summary-home' %}" class="btn btn-default">Quay Lại</a>
+                                {% elif url_name == 'import-fee-cbc' %}
+                                  <a href="{% url 'fee-cbc-home' %}" class="btn btn-default">Quay Lại</a>
+                                {% elif url_name == 'import-fee-qr' %}
+                                  <a href="{% url 'fee-qr-home' %}" class="btn btn-default">Quay Lại</a>
+                                {% elif url_name == 'import-fee-cup' %}
+                                  <a href="{% url 'fee-cup-home' %}" class="btn btn-default">Quay Lại</a>
+                                {% elif url_name == 'import-fee-napas' %}
+                                  <a href="{% url 'fee-napas-home' %}" class="btn btn-default">Quay Lại</a>
+                                {% endif %}
+                              </div>
+                              <div class="col-md-4 text-center">
+                                <button type="submit" value="Submit" class="btn btn-success">Tải Lên</button>
+                              </div>
+                            {% endwith %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>        
+    
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  // FileInput
+    $('.form-file-simple .inputFileVisible').click(function() {
+      $(this).siblings('.inputFileHidden').trigger('click');
+    });
+
+    $('.form-file-simple .inputFileHidden').change(function() {
+      var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+      $(this).siblings('.inputFileVisible').val(filename);
+    });
+
+    $('.form-file-multiple .inputFileVisible, .form-file-multiple .input-group-btn').click(function() {
+      $(this).parent().parent().find('.inputFileHidden').trigger('click');
+      $(this).parent().parent().addClass('is-focused');
+    });
+
+    $('.form-file-multiple .inputFileHidden').change(function() {
+      var names = '';
+      for (var i = 0; i < $(this).get(0).files.length; ++i) {
+        if (i < $(this).get(0).files.length - 1) {
+          names += $(this).get(0).files.item(i).name + ',';
+        } else {
+          names += $(this).get(0).files.item(i).name;
+        }
+      }
+      $(this).siblings('.input-group').find('.inputFileVisible').val(names);
+    });
+
+    $('.form-file-multiple .btn').on('focus', function() {
+      $(this).parent().siblings().trigger('focus');
+    });
+
+    $('.form-file-multiple .btn').on('focusout', function() {
+      $(this).parent().siblings().trigger('focusout');
+    });
+</script>  
+{% endblock javascripts %}
+
+

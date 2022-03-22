@@ -1,0 +1,140 @@
+<form method="post" action="">
+  {% csrf_token %}
+  
+  {{ form.media.js }}
+  <div class="modal-header">
+    <h5 class="modal-title">TẠO ĐIỂM LẮP ĐẶT</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card ">
+      
+      <div class="card-body ">
+        <div class="row">
+          <label class="col-md-2 col-form-label">Tên Điểm</label>
+          <div class="col-md-10">
+            <div class="form-group has-default">
+              {{ form.name }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-md-2 col-form-label">Tỉnh/Thành Phố</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.city }}
+            </div>
+          </div>
+          <label class="col-md-2 col-form-label">Huyện/Quận</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.district }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-md-2 col-form-label">Xã/Phường</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.ward }}
+            </div>
+          </div>
+          <label class="col-md-2 col-form-label">Tên Đường</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.street }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-md-2 col-form-label">Đơn Vị Quản Lý</label>
+          <div class="col-md-4">
+            <div class="form-group has-default">
+              {{ form.manager }}
+            </div>
+          </div>
+          <label class="col-md-2 col-form-label">Đơn Vị Tiếp Quỹ</label>
+          <div class="col-md-4">
+            <div class="form-group has-default">
+              {{ form.fundraiser }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-md-2 col-form-label">Số Lượng ATM</label>
+          <div class="col-md-4">
+            <div class="form-group has-default">
+              {{ form.number }}
+            </div>
+          </div>
+          <label class="col-md-2 col-form-label">Vị Trí Lắp Đặt</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.area }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="col-md-2 col-form-label">Số CN/PGD</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.contact01 }}
+            </div>
+          </div>
+          <label class="col-md-2 col-form-label">Số Bảo Vệ</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.contact02 }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="col-md-2 col-form-label">Liên Hệ 01</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.contact03 }}
+            </div>
+          </div>
+          <label class="col-md-2 col-form-label">Liên Hệ 02</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.contact04 }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="col-md-2 col-form-label">Trọng Điểm</label>
+          <div class="col-md-4">
+            <div class="form-check">
+              <label class="form-check-label">
+                  {{ form.forcus }}
+                  <span class="form-check-sign">
+                      <span class="check"></span>
+                  </span>
+              </label>
+          </div>
+          </div>
+          <label class="col-md-2 col-form-label">Trạng Thái</label>
+          <div class="col-md-4">
+            <div class="form-group">
+              {{ form.status }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+          
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">TẠO ĐIỂM ĐẶT</button>
+    <button type="submit" class="btn btn-secondary" data-dismiss="modal">ĐÓNG</button>
+  </div>
+</form>
+
+
+

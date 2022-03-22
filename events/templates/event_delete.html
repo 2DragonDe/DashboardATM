@@ -1,0 +1,17 @@
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="modal-body">
+        <div class="info text-center">
+            <div class="icon icon-danger ">
+                <i class="material-icons">delete_forever</i>
+            </div>
+            <h2 class="info-title text-danger">BẠN CÓ CHẮC CHẮN MUỐN XOÁ?</h2>
+            <p>Xoá toàn bộ thông tin về điểm <span class="text-primary">{{ event.name }}</span>!</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger">Xoá</button>
+        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+    </div>
+
+</form>

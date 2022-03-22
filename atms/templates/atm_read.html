@@ -1,0 +1,74 @@
+<div class="modal-header">
+    <h5 class="modal-title text-rose text-uppercase title-atms">{{ atm.name }}</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header card-header-icon card-header-rose">
+                    <div class="card-icon">
+                        <i class="material-icons">language</i>
+                    </div>
+                    <h4 class="card-title">Thông tin chung</h4>
+                </div>
+                <div class="card-body">
+                    <p><span class="text-info h6 card-category"><i class="material-icons">shutter_speed</i> Tên VynamicView:</span>  {{ atm.name_vynamic }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">filter_vintage</i> Tên WAY4:</span> {{ atm.name_way4 }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">coronavirus</i> Terminal ID:</span>  {{ atm.terminal_id }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">api</i> Machine NO:</span>   {{ atm.machine_no }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">layers</i> Số Lượng ATM/CDM:</span>  {{ atm.location.number }}</p>                    
+                    <p><span class="text-info h6 card-category"><i class="material-icons">flutter_dash</i> Ghost Version:</span>  {{ atm.ghost_vesion }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">privacy_tip</i> Security Version:</span>  {{ atm.get_security_soft_display }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">support</i> Trạng Thái:</span>  {{ atm.get_status_display }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header card-header-icon card-header-rose">
+                    <div class="card-icon">
+                        <i class="material-icons">language</i>
+                    </div>
+                    <h4 class="card-title">Network & Setup</h4>
+                </div>
+                <div class="card-body">
+                    <p><span class="text-info h6 card-category"><i class="material-icons">signal_cellular_alt</i> Gateway:</span>  {{ atm.gateway }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">storage</i> ATM IP:</span>  {{ atm.ip }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">photo_camera</i> Camera IP:</span>  {{ atm.camera_ip }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">book_online</i> Ngày Lắp Đặt:</span>  {{ atm.date_setup|date:"d/m/Y" }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">fact_check</i> Ngày Vận Hành:</span>  {{ atm.date_operate|date:"d/m/Y" }}</p> 
+                    <p><span class="text-info h6 card-category"><i class="material-icons">settings_input_composite</i> Ngày Ngưng HĐ:</span>  {{ atm.date_deactivated|date:"d/m/Y" }}</p>                    
+                    <p><span class="text-info h6 card-category"><i class="material-icons">room_preferences</i> Kiểu Lắp Đặt:</span>  {{ atm.location.get_setup_display }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">pin_drop</i> Vị Trí Đặt:</span>  {{ atm.location.get_area_display }}</p>                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon card-header-rose">
+                    <div class="card-icon">
+                        <i class="material-icons">language</i>
+                    </div>
+                    <h4 class="card-title">Liên Hệ</h4>
+                </div>
+                <div class="card-body">
+                    <p><span class="text-info h6 card-category"><i class="material-icons">location_on</i> Địa Chỉ:</span>  {{ atm.location.street }}, {{ atm.location.ward }}, {{ atm.location.district }}, {{ atm.location.city }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">apartment</i> Đơn Vị Quản Lý:</span> {{ atm.location.manager }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">support_agent</i> Liên Hệ 01:</span> {{ atm.location.contact01 }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">contact_phone</i> Liên Hệ 02:</span> {{ atm.location.contact02 }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">stay_primary_portrait</i> Liên Hệ 03:</span> {{ atm.location.contact03 }}</p>
+                    <p><span class="text-info h6 card-category"><i class="material-icons">stay_primary_portrait</i> Liên Hệ 04:</span> {{ atm.location.contact04 }}</p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
